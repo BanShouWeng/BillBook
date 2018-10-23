@@ -1,4 +1,4 @@
-package com.demo.bsw.billbook;
+package com.bsw.billbook;
 
 import org.junit.Test;
 

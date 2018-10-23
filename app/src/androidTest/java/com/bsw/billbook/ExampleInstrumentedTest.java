@@ -1,4 +1,4 @@
-package com.demo.bsw.billbook;
+package com.bsw.billbook;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/title_height"
+    tools:ignore="SpUsage,UselessParent,ContentDescription">
+
+    <RelativeLayout
+        android:id="@+id/base_bg"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/title_height"
+        android:background="@color/blue">
+
+        <ImageView
+            android:id="@+id/base_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="@dimen/size_13"
+            android:src="@mipmap/icon_back"
+            android:tint="@android:color/white" />
+
+        <ImageView
+            android:id="@+id/base_close"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@+id/base_back"
+            android:layout_toRightOf="@+id/base_back"
+            android:padding="@dimen/size_13"
+            android:src="@mipmap/close"
+            android:tint="@android:color/white"
+            android:visibility="visible" />
+
+        <TextView
+            android:id="@+id/base_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/size_20" />
+
+        <ImageView
+            android:id="@+id/base_right_icon2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toLeftOf="@+id/base_right_icon1"
+            android:layout_toStartOf="@+id/base_right_icon1"
+            android:padding="@dimen/size_13"
+            android:tint="@android:color/white"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/base_right_icon1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/size_13"
+            android:tint="@android:color/white"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:id="@+id/base_right_text"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/size_17"
+            android:visibility="gone"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+</RelativeLayout>

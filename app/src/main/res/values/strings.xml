@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">BillBook</string>
+
+    <string name="all_loaded">已全部加载</string>
 </resources>
