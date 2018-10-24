@@ -10,4 +10,6 @@
     <string name="day">日</string>
     <string name="hour">时</string>
     <string name="minute">秒</string>
+    <string name="information_incomplete">信息不完整，请重新填写</string>
+    <string name="keyword_input">请输入关键字</string>
 </resources>
