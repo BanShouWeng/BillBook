@@ -56,8 +56,7 @@ public class TimeSelector {
     private int scrollUnits = SCROLLTYPE.HOUR.value + SCROLLTYPE.MINUTE.value;
     private ResultHandler handler;
     private Context context;
-    private final String FORMAT_STR = "yyyy-MM-dd HH:mm";
-    private final String COMMON_STR = "yyyy-MM-dd-HH-mm";
+    public static final String FORMAT_STR = "yyyy-MM-dd HH:mm";
 
     private Dialog seletorDialog;
     private PickerView year_pv;
@@ -112,7 +111,7 @@ public class TimeSelector {
             Toast.makeText(context, "start>end", Toast.LENGTH_LONG).show();
             return;
         }
-        if (! excuteWorkTime()) return;
+        if (!excuteWorkTime()) return;
         initParameter();
         initTimer();
         addListener();
@@ -121,7 +120,7 @@ public class TimeSelector {
 
     public void show(String tag, String showTime) {
         this.tag = tag;
-        selectedCalender.setTime(DateUtil.parse(showTime, COMMON_STR));
+        selectedCalender.setTime(DateUtil.parse(showTime, FORMAT_STR));
         String showtimes[] = showTime.split("-");
         showTimes = new ArrayList<>();
         showTimes.add(Integer.parseInt(showtimes[0]) - 2009);
@@ -135,7 +134,7 @@ public class TimeSelector {
 //            return;
 //        }
 
-        if (! excuteWorkTime()) return;
+        if (!excuteWorkTime()) return;
         initParameter();
         initTimer();
         addListener();
@@ -195,10 +194,10 @@ public class TimeSelector {
         endHour = endCalendar.get(Calendar.HOUR_OF_DAY);
         endMinute = endCalendar.get(Calendar.MINUTE);
         spanYear = startYear != endYear;
-        spanMon = (! spanYear) && (startMonth != endMonth);
-        spanDay = (! spanMon) && (startDay != endDay);
-        spanHour = (! spanDay) && (startHour != endHour);
-        spanMin = (! spanHour) && (startMinute != endMinute);
+        spanMon = (!spanYear) && (startMonth != endMonth);
+        spanDay = (!spanMon) && (startDay != endDay);
+        spanHour = (!spanDay) && (startHour != endHour);
+        spanMin = (!spanHour) && (startMinute != endMinute);
     }
 
     private void initTimer() {
@@ -310,7 +309,7 @@ public class TimeSelector {
 
     private boolean excuteWorkTime() {
         boolean res = true;
-        if (! TextUtils.isEmpty(workStart_str) && ! TextUtils.isEmpty(workEnd_str)) {
+        if (!TextUtils.isEmpty(workStart_str) && !TextUtils.isEmpty(workEnd_str)) {
             String[] start = workStart_str.split(":");
             String[] end = workEnd_str.split(":");
             hour_workStart = Integer.parseInt(start[0]);

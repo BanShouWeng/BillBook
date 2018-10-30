@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/_item_time"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:background="@color/light_blue"
+    android:gravity="center_vertical"
+    android:paddingEnd="@dimen/common_padding"
+    android:paddingLeft="@dimen/common_padding"
+    android:paddingRight="@dimen/common_padding"
+    android:paddingStart="@dimen/common_padding"
+    android:textColor="@color/red"
+    android:textSize="@dimen/size_20"
+    tools:ignore="SpUsage" />

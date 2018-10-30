@@ -2,6 +2,7 @@ package com.bsw.billbook.widget.BswRecyclerView;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.IdRes;
 import android.support.annotation.StringRes;

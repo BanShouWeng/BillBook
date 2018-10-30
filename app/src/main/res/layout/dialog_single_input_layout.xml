@@ -17,20 +17,19 @@
         android:textColor="@color/text_color"
         android:textSize="@dimen/size_17" />
 
-    <com.zxycloud.zxwl.widget.MultifunctionalEditText
+    <EditText
         android:id="@+id/gateway_id_input"
-        style="@style/edit_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/common_padding"
         android:background="@drawable/corner_gray_4_hollow"
-        android:hint="@string/gateway_id_hint"
+        android:hint="@string/keyword_input"
         android:inputType="text"
         android:paddingBottom="@dimen/size_5"
         android:paddingLeft="@dimen/size_8"
         android:paddingTop="@dimen/size_5" />
 
-    <include layout="@layout/horizontal_line" />
+    <include layout="@layout/include_devider_layout" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -62,7 +61,7 @@
             android:gravity="center"
             android:padding="@dimen/size_15"
             android:text="@string/confirm"
-            android:textColor="@color/green"
+            android:textColor="@color/light_blue"
             android:textSize="@dimen/size_17" />
     </LinearLayout>
 </LinearLayout>

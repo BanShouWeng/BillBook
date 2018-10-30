@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.bsw.billbook.R;
 import com.bsw.billbook.utils.TxtUtils;
-import com.zxycloud.zxwl.R;
-import com.zxycloud.zxwl.utils.TxtUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,21 +21,21 @@ import java.util.Map;
  * @author leiming
  * @date 2018/04/02
  */
-public class CustomSingleInputDialog {
+public class SingleInputDialog {
 
     private Context context;
     private AlertDialog myDialog;
 
     private EditText gatewayIdInput;
 
-    private OnCustomSingleInputListener listener;
+    private OnSingleInputListener listener;
     private String userPhone;
 
-    public static CustomSingleInputDialog show(Context context, OnCustomSingleInputListener listener) {
-        return new CustomSingleInputDialog(context, listener);
+    public static SingleInputDialog show(Context context, OnSingleInputListener listener) {
+        return new SingleInputDialog(context, listener);
     }
 
-    private CustomSingleInputDialog(Context context, OnCustomSingleInputListener listener) {
+    private SingleInputDialog(Context context, OnSingleInputListener listener) {
         this.context = context;
         this.listener = listener;
         initDialog();
@@ -85,12 +83,12 @@ public class CustomSingleInputDialog {
 
     private void confirm() {
         Map<String, String> params = new HashMap<>();
-        String gatewayName = TxtUtils.getText(gatewayIdInput);
-        if (TextUtils.isEmpty(gatewayName)) {
+        String keyword = TxtUtils.getText(gatewayIdInput);
+        if (TextUtils.isEmpty(keyword)) {
             toast(R.string.information_incomplete);
             return;
         }
-        listener.getResult(gatewayName);
+        listener.getResult(keyword);
         myDialog.dismiss();
     }
 
@@ -98,7 +96,7 @@ public class CustomSingleInputDialog {
         myDialog.dismiss();
     }
 
-    public interface OnCustomSingleInputListener {
-        void getResult(String gatewayName);
+    public interface OnSingleInputListener {
+        void getResult(String keyword);
     }
 }

@@ -10,12 +10,12 @@ import com.bsw.billbook.utils.Const;
  * Created by leiming on 2018/1/9.
  */
 
-public class CustomerPagerAdapter extends FragmentPagerAdapter {
+public class BswPagerAdapter extends FragmentPagerAdapter {
 
     private Fragment[] fragments;
     private String[] titles;
 
-    public CustomerPagerAdapter(FragmentManager fm) {
+    public BswPagerAdapter(FragmentManager fm) {
         super(fm);
     }
 
@@ -25,7 +25,7 @@ public class CustomerPagerAdapter extends FragmentPagerAdapter {
      * @param fragments Fragment数组
      * @return 适配器
      */
-    public CustomerPagerAdapter setFragments(Fragment... fragments) {
+    public BswPagerAdapter setFragments(Fragment... fragments) {
         this.fragments = fragments;
         return this;
     }
@@ -36,7 +36,7 @@ public class CustomerPagerAdapter extends FragmentPagerAdapter {
      * @param titles title数组
      * @return 适配器
      */
-    public CustomerPagerAdapter setTitles(String... titles) {
+    public BswPagerAdapter setTitles(String... titles) {
         this.titles = titles;
         return this;
     }

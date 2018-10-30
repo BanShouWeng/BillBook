@@ -2,6 +2,11 @@
     <string name="app_name">BillBook</string>
 
     <string name="all_loaded">已全部加载</string>
+
+    <string name="oil">油</string>
+    <string name="accessories">配件</string>
+    <string name="title_activity_add_record">AddRecordActivity</string>
+
     <string name="cancel">取消</string>
     <string name="choose_time">时间选择器</string>
     <string name="confirm">确定</string>
@@ -12,4 +17,5 @@
     <string name="minute">秒</string>
     <string name="information_incomplete">信息不完整，请重新填写</string>
     <string name="keyword_input">请输入关键字</string>
+    <string name="title_activity_accessories_choose">AccessoriesChooseActivity</string>
 </resources>

@@ -8,7 +8,7 @@ import android.support.annotation.LayoutRes;
  * @author leiming
  * @date 2018/4/22 11:26
  */
-interface MultiplexAdapterCallBack<T> {
+public interface MultiplexAdapterCallBack<T> {
     /**
      * 布局设置方法
      *

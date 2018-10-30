@@ -8,8 +8,9 @@
     <RelativeLayout
         android:id="@+id/base_bg"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        android:background="@color/blue">
+        android:background="@color/main_color"
+        android:paddingTop="@dimen/size_20"
+        android:layout_height="@dimen/title_height">
 
         <ImageView
             android:id="@+id/base_back"
@@ -26,16 +27,18 @@
             android:layout_toEndOf="@+id/base_back"
             android:layout_toRightOf="@+id/base_back"
             android:padding="@dimen/size_13"
-            android:src="@mipmap/close"
+            android:src="@mipmap/icon_close"
             android:tint="@android:color/white"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/base_title"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="50dp"
             android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
+            android:text="dasdsdasdasdad"
             android:textColor="@android:color/white"
             android:textSize="@dimen/size_20" />
 

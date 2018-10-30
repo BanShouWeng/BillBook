@@ -376,4 +376,8 @@ public class BswRecyclerView<T> extends RecyclerView {
     public int getItemCount() {
         return adapter.getItemCount();
     }
+
+    public T getItem(int position){
+        return adapter.getItem(position);
+    }
 }

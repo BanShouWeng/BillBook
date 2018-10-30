@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewStub;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -368,7 +369,7 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
      * @param layoutId 布局id
      */
     private void setBaseContentView(int layoutId) {
-        LinearLayout layout = getView(R.id.base_main_layout);
+        FrameLayout layout = getView(R.id.base_main_layout);
 
         //获取布局，并在BaseActivity基础上显示
         final View view = mActivity.getLayoutInflater().inflate(layoutId, null);
@@ -377,8 +378,8 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
         //给EditText的父控件设置焦点，防止键盘自动弹出
         view.setFocusable(true);
         view.setFocusableInTouchMode(true);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
         layout.addView(view, params);
     }
 
@@ -484,6 +485,10 @@ public abstract class BaseFragment extends Fragment implements View.OnClickListe
      */
     protected String getName(Class<?> clz) {
         return clz.getClass().getSimpleName();
+    }
+
+    protected void finish(){
+        mActivity.finish();
     }
 
     /**

@@ -2,6 +2,10 @@ package com.bsw.billbook;
 
 import org.junit.Test;
 
+import java.net.PortUnreachableException;
+import java.util.Calendar;
+import java.util.UUID;
+
 import static org.junit.Assert.*;
 
 /**
@@ -13,5 +17,17 @@ public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
+    }
+
+    @Test
+    public void timeTest() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(1532327813000L);
+        System.out.println((calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日");
+    }
+
+    @Test
+    public void uuid(){
+        System.out.print(UUID.randomUUID().toString());
     }
 }
