@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.bsw.billbook.R;
 import com.bsw.billbook.base.fragment.BaseFragment;
+import com.bsw.billbook.bean.AccessoriesTypeBean;
+import com.bsw.billbook.bean.RecordAccessoriesCountBean;
 import com.bsw.billbook.bean.RecordItemBean;
 import com.bsw.billbook.ui.activity.AccessoriesChooseActivity;
+import com.bsw.billbook.utils.Const;
 import com.bsw.billbook.utils.DateFormatUtils;
 import com.bsw.billbook.utils.TxtUtils;
 import com.bsw.billbook.widget.timeselector.TimeSelector;
@@ -24,10 +27,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
 public class WarehousingFragment extends BaseFragment {
-
-    private final String FORMAT_STRING = "yyyy-MM-dd hh:mm";
     private final int REQUEST_CODE = 201;
 
     private boolean isVisibleToUser;
@@ -40,6 +42,7 @@ public class WarehousingFragment extends BaseFragment {
     private String currentTime;
     private String typeUuid;
     private String typeName;
+    private double typeCount;
 
     public static WarehousingFragment newInstance() {
         return new WarehousingFragment();
@@ -77,6 +80,7 @@ public class WarehousingFragment extends BaseFragment {
     @Override
     protected void formatViews() {
         setOnClickListener(R.id.info_time_input, R.id.info_type_input);
+        infoCountInput.setHint(String.format("现有库存%s", typeCount));
     }
 
     @Override
@@ -114,26 +118,44 @@ public class WarehousingFragment extends BaseFragment {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             typeUuid = data.getStringExtra("typeUuid");
             typeName = data.getStringExtra("typeName");
+            typeCount = data.getDoubleExtra("typeCount", 0);
             infoTypeInput.setText(typeName);
         }
     }
 
     public void onSubmit() {
         if (isVisibleToUser) {
-            final String count = TxtUtils.getText(infoCountInput);
+            final Double count = Double.valueOf(TxtUtils.getText(infoCountInput));
             final String price = TxtUtils.getText(infoPriceInput);
-            if (TextUtils.isEmpty(count) || TextUtils.isEmpty(price) || TextUtils.isEmpty(currentTime) || TextUtils.isEmpty(typeName)) {
+            if (count == 0 || TextUtils.isEmpty(price) || TextUtils.isEmpty(currentTime) || TextUtils.isEmpty(typeName)) {
                 toast("信息填写不完整");
             } else {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(@NonNull Realm realm) {
+                        RecordAccessoriesCountBean countBean = realm.where(RecordAccessoriesCountBean.class)
+                                .equalTo("accessoriesUuid", typeUuid)
+                                .sort("recordTime", Sort.DESCENDING)
+                                .findFirst();
+                        if (Const.notEmpty(countBean)) {
+                            countBean.setWarehousingAccessories(countBean.getWarehousingAccessories() + count)
+                                    .setWarehousingTimes();
+                            realm.copyToRealmOrUpdate(countBean);
+                        }
+
+                        AccessoriesTypeBean typeBean = realm.where(AccessoriesTypeBean.class).equalTo("uuid", typeUuid).findFirst();
+                        if (Const.notEmpty(typeBean)) {
+                            typeBean.setTypeCount(count + typeCount);
+                            realm.copyToRealmOrUpdate(typeBean);
+                        }
+
                         RecordItemBean itemBean = realm.createObject(RecordItemBean.class, UUID.randomUUID().toString());
                         try {
                             itemBean.setOperatingTime(DateFormatUtils.parse(currentTime, DateFormatUtils.COMMON_FORMAT));
                             itemBean.setType(RecordItemBean.TYPE_WAREHOUSING);
                             itemBean.setAccessoriesType(typeName);
                             itemBean.setAccessoriesUuid(typeUuid);
+                            itemBean.setOil(typeUuid.equals(AccessoriesTypeBean.OIL_UUID));
                             itemBean.setUnitPrice(price);
                             itemBean.setCount(count);
                             toast("添加成功");

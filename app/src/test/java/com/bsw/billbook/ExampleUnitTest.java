@@ -3,6 +3,7 @@ package com.bsw.billbook;
 import org.junit.Test;
 
 import java.net.PortUnreachableException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -29,5 +30,11 @@ public class ExampleUnitTest {
     @Test
     public void uuid(){
         System.out.print(UUID.randomUUID().toString());
+    }
+
+    @Test
+    public void split(){
+        String[] recordTimeSplit= "2018/15/22".split("/");
+        System.out.println(Arrays.toString(recordTimeSplit));
     }
 }

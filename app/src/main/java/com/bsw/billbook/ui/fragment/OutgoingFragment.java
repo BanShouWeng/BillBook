@@ -12,8 +12,11 @@ import android.widget.TextView;
 
 import com.bsw.billbook.R;
 import com.bsw.billbook.base.fragment.BaseFragment;
+import com.bsw.billbook.bean.AccessoriesTypeBean;
+import com.bsw.billbook.bean.RecordAccessoriesCountBean;
 import com.bsw.billbook.bean.RecordItemBean;
 import com.bsw.billbook.ui.activity.AccessoriesChooseActivity;
+import com.bsw.billbook.utils.Const;
 import com.bsw.billbook.utils.DateFormatUtils;
 import com.bsw.billbook.utils.TxtUtils;
 import com.bsw.billbook.widget.timeselector.TimeSelector;
@@ -24,9 +27,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 import io.realm.Realm;
+import io.realm.Sort;
 
 public class OutgoingFragment extends BaseFragment {
-    private final String FORMAT_STRING = "2017-01-01 00:00";
     private final int REQUEST_CODE = 201;
 
     private boolean isVisibleToUser;
@@ -39,6 +42,7 @@ public class OutgoingFragment extends BaseFragment {
     private String currentTime;
     private String typeUuid;
     private String typeName;
+    private Double typeCount;
 
     public static OutgoingFragment newInstance() {
         return new OutgoingFragment();
@@ -56,7 +60,7 @@ public class OutgoingFragment extends BaseFragment {
             Calendar calendar = Calendar.getInstance();
             currentTime = String.format(Locale.getDefault(), "%d-%s-%s %s:%s", calendar.get(Calendar.YEAR), format(calendar.get(Calendar.MONTH) + 1), format(calendar.get(Calendar.DAY_OF_MONTH)), format(calendar.get(Calendar.HOUR_OF_DAY)), format(calendar.get(Calendar.MINUTE)));
         }
-        timeSelector = new TimeSelector(mActivity, resultHandler, FORMAT_STRING, currentTime);
+        timeSelector = new TimeSelector(mActivity, resultHandler, "2017-01-01 00:00", currentTime);
         infoTimeInput.setText(currentTime);
     }
 
@@ -79,6 +83,7 @@ public class OutgoingFragment extends BaseFragment {
     @Override
     protected void formatViews() {
         setOnClickListener(R.id.info_time_input, R.id.info_type_input);
+        infoCountInput.setHint(String.format("现有库存%s", typeCount));
     }
 
     @Override
@@ -116,37 +121,57 @@ public class OutgoingFragment extends BaseFragment {
         if (requestCode == REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             typeUuid = data.getStringExtra("typeUuid");
             typeName = data.getStringExtra("typeName");
+            typeCount = data.getDoubleExtra("typeCount", 0);
             infoTypeInput.setText(typeName);
         }
     }
 
     public void onSubmit() {
         if (isVisibleToUser) {
-            final String count = TxtUtils.getText(infoCountInput);
+            final Double count = Double.valueOf(TxtUtils.getText(infoCountInput));
             final String price = TxtUtils.getText(infoPriceInput);
             final String numberPlate = TxtUtils.getText(infoNumberPlateInput);
             final String sign = TxtUtils.getText(infoSignInput);
             final String repair = TxtUtils.getText(infoRepairInput);
-            if (TextUtils.isEmpty(count) || TextUtils.isEmpty(currentTime) || TextUtils.isEmpty(typeName)
+            if (count == 0 || TextUtils.isEmpty(currentTime) || TextUtils.isEmpty(typeName)
                     || TextUtils.isEmpty(numberPlate) || TextUtils.isEmpty(sign)) {
                 toast("信息填写不完整");
+            } else if (typeCount < count) {
+                toast("库存不足");
             } else {
                 realm.executeTransaction(new Realm.Transaction() {
                     @Override
                     public void execute(@NonNull Realm realm) {
+                        RecordAccessoriesCountBean countBean = realm.where(RecordAccessoriesCountBean.class)
+                                .equalTo("accessoriesUuid", typeUuid)
+                                .sort("recordTime", Sort.DESCENDING)
+                                .findFirst();
+                        if (Const.notEmpty(countBean)) {
+                            countBean.setWarehousingAccessories(countBean.getWarehousingAccessories() + count)
+                                    .setOutGoingTimes();
+                            realm.copyToRealmOrUpdate(countBean);
+                        }
+
+                        AccessoriesTypeBean typeBean = realm.where(AccessoriesTypeBean.class).equalTo("uuid", typeUuid).findFirst();
+                        if (Const.notEmpty(typeBean)) {
+                            typeBean.setTypeCount(typeCount - count);
+                            realm.copyToRealmOrUpdate(typeBean);
+                        }
+
                         RecordItemBean itemBean = realm.createObject(RecordItemBean.class, UUID.randomUUID().toString());
                         try {
                             itemBean.setOperatingTime(DateFormatUtils.parse(currentTime, DateFormatUtils.COMMON_FORMAT));
                             itemBean.setType(RecordItemBean.TYPE_OUTGOING);
                             itemBean.setAccessoriesType(typeName);
                             itemBean.setAccessoriesUuid(typeUuid);
+                            itemBean.setOil(typeUuid.equals(AccessoriesTypeBean.OIL_UUID));
                             itemBean.setCount(count);
                             itemBean.setNumberPlate(numberPlate);
                             itemBean.setSign(sign);
-                            if (!TextUtils.isEmpty(repair)) {
-                                itemBean.setRepair(price);
+                            if (! TextUtils.isEmpty(repair)) {
+                                itemBean.setRepair(repair);
                             }
-                            if (!TextUtils.isEmpty(price)) {
+                            if (! TextUtils.isEmpty(price)) {
                                 itemBean.setUnitPrice(price);
                             }
                             toast("添加成功");
@@ -173,6 +198,7 @@ public class OutgoingFragment extends BaseFragment {
         @Override
         public void handle(String tag, String time) {
             currentTime = time;
+            infoTimeInput.setText(currentTime);
         }
     };
 }

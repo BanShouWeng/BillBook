@@ -1,7 +1,5 @@
 package com.bsw.billbook.bean;
 
-import android.text.TextUtils;
-
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -36,7 +34,7 @@ public class RecordItemBean extends RealmObject {
      * 数量，可能是多少升油，不一定是整数
      */
     @Required
-    private String count;
+    private Double count;
 
     /**
      * 车牌号
@@ -58,6 +56,11 @@ public class RecordItemBean extends RealmObject {
      */
     @Required
     private String accessoriesType;
+    /**
+     * 配件类型
+     */
+    @Required
+    private Boolean isOil;
 
     /**
      * 配件UUID
@@ -65,75 +68,97 @@ public class RecordItemBean extends RealmObject {
     @Required
     private String accessoriesUuid;
 
+    public String getUuid() {
+        return uuid;
+    }
+
     public Integer getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public RecordItemBean setType(Integer type) {
         this.type = type;
+        return this;
     }
 
     public Long getOperatingTime() {
         return operatingTime;
     }
 
-    public void setOperatingTime(Long operatingTime) {
+    public RecordItemBean setOperatingTime(Long operatingTime) {
         this.operatingTime = operatingTime;
+        return this;
     }
 
     public String getUnitPrice() {
         return unitPrice;
     }
 
-    public void setUnitPrice(String unitPrice) {
+    public RecordItemBean setUnitPrice(String unitPrice) {
         this.unitPrice = unitPrice;
+        return this;
     }
 
-    public String getCount() {
+    public Double getCount() {
         return count;
     }
 
-    public void setCount(String count) {
+    public RecordItemBean setCount(Double count) {
         this.count = count;
+        return this;
     }
 
     public String getNumberPlate() {
         return numberPlate;
     }
 
-    public void setNumberPlate(String numberPlate) {
+    public RecordItemBean setNumberPlate(String numberPlate) {
         this.numberPlate = numberPlate;
+        return this;
     }
 
     public String getSign() {
         return sign;
     }
 
-    public void setSign(String sign) {
+    public RecordItemBean setSign(String sign) {
         this.sign = sign;
+        return this;
     }
 
     public String getRepair() {
         return repair;
     }
 
-    public void setRepair(String repair) {
+    public RecordItemBean setRepair(String repair) {
         this.repair = repair;
+        return this;
     }
 
     public String getAccessoriesType() {
         return accessoriesType;
     }
 
-    public void setAccessoriesType(String accessoriesType) {
+    public RecordItemBean setAccessoriesType(String accessoriesType) {
         this.accessoriesType = accessoriesType;
+        return this;
     }
 
     public String getAccessoriesUuid() {
         return accessoriesUuid;
     }
 
-    public void setAccessoriesUuid(String accessoriesUuid) {
+    public RecordItemBean setAccessoriesUuid(String accessoriesUuid) {
         this.accessoriesUuid = accessoriesUuid;
+        return this;
+    }
+
+    public Boolean getOil() {
+        return isOil;
+    }
+
+    public RecordItemBean setOil(Boolean oil) {
+        isOil = oil;
+        return this;
     }
 }

@@ -26,7 +26,11 @@
         <activity
             android:name=".ui.activity.AccessoriesChooseActivity"
             android:label="@string/title_activity_accessories_choose"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.activity.OutgoingActivity" />
+        <activity android:name=".ui.activity.WarehousingActivity" />
+        <activity android:name=".ui.activity.RecordActivity" />
+        <activity android:name=".ui.activity.RecordDetailActivity"></activity>
     </application>
 
 </manifest>

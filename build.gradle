@@ -25,3 +25,8 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+// 通用配置，需要创建common_config.gradle，并在每个gradle中添加对应配置
+subprojects{
+    apply from: "${project.rootDir}/common_config.gradle"
+}

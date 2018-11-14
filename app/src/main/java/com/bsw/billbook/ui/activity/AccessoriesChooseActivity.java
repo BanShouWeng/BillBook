@@ -10,18 +10,15 @@ import android.widget.EditText;
 import com.bsw.billbook.R;
 import com.bsw.billbook.base.activity.BaseLayoutActivity;
 import com.bsw.billbook.bean.AccessoriesTypeBean;
-import com.bsw.billbook.bean.RecordItemBean;
 import com.bsw.billbook.utils.Const;
+import com.bsw.billbook.utils.RealmUtils;
 import com.bsw.billbook.widget.BswRecyclerView.BswFilterRecyclerView;
-import com.bsw.billbook.widget.BswRecyclerView.BswRecyclerView;
 import com.bsw.billbook.widget.BswRecyclerView.FilterConvertViewCallBack;
 import com.bsw.billbook.widget.BswRecyclerView.RecyclerViewHolder;
 import com.bsw.billbook.widget.SingleInputDialog;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 import java.util.UUID;
 
 import io.realm.Realm;
@@ -43,7 +40,27 @@ public class AccessoriesChooseActivity extends BaseLayoutActivity {
         setBaseRightText("添加");
         resetBaseBack();
         realm = Realm.getDefaultInstance();
+        initJudge();
         getTypeList();
+    }
+
+    private void initJudge() {
+        AccessoriesTypeBean typeBean = realm.where(AccessoriesTypeBean.class).equalTo("uuid", AccessoriesTypeBean.OIL_UUID).findFirst();
+        if (Const.isEmpty(typeBean)) {
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NonNull Realm realm) {
+                    AccessoriesTypeBean accessoriesTypeBean = realm.createObject(AccessoriesTypeBean.class, AccessoriesTypeBean.OIL_UUID);
+                    accessoriesTypeBean.setEditTime(System.currentTimeMillis())
+                            .setTimer(false)
+                            .setTypeName("油")
+                            .setTypeCount(0.0);
+                    getTypeList();
+                }
+            });
+        } else {
+            getTypeList();
+        }
     }
 
     private void getTypeList() {
@@ -84,6 +101,7 @@ public class AccessoriesChooseActivity extends BaseLayoutActivity {
         switch (v.getId()) {
             case BACK_ID:
                 setResult(RESULT_CANCELED);
+                finish();
                 break;
 
             case RIGHT_TEXT_ID:
@@ -104,6 +122,7 @@ public class AccessoriesChooseActivity extends BaseLayoutActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             setResult(RESULT_CANCELED);
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -126,8 +145,9 @@ public class AccessoriesChooseActivity extends BaseLayoutActivity {
                                 }
                             });
                             Intent intent = new Intent();
-                            intent.putExtra("uuid", accessoriesTypeBean.getUuid());
+                            intent.putExtra("typeUuid", accessoriesTypeBean.getUuid());
                             intent.putExtra("typeName", accessoriesTypeBean.getTypeName());
+                            intent.putExtra("typeCount", accessoriesTypeBean.getTypeCount());
                             setResult(RESULT_OK, intent);
                             finish();
                         }
@@ -151,10 +171,13 @@ public class AccessoriesChooseActivity extends BaseLayoutActivity {
         public void getResult(final String keyword) {
             realm.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
-                    AccessoriesTypeBean accessoriesTypeBean = realm.createObject(AccessoriesTypeBean.class, UUID.randomUUID().toString());
-                    accessoriesTypeBean.setEditTime(System.currentTimeMillis());
-                    accessoriesTypeBean.setTypeName(keyword);
+                public void execute(@NonNull Realm realm) {
+                    String uuid = UUID.randomUUID().toString();
+                    AccessoriesTypeBean accessoriesTypeBean = realm.createObject(AccessoriesTypeBean.class, uuid);
+                    accessoriesTypeBean.setEditTime(System.currentTimeMillis())
+                            .setTypeName(keyword)
+                            .setTimer(false)
+                            .setTypeCount(0.0);
                     getTypeList();
                 }
             });

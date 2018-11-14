@@ -20,6 +20,7 @@ import com.bsw.billbook.widget.timeselector.view.PickerView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by liuli on 2015/11/27.
@@ -111,7 +112,7 @@ public class TimeSelector {
             Toast.makeText(context, "start>end", Toast.LENGTH_LONG).show();
             return;
         }
-        if (!excuteWorkTime()) return;
+        if (! excuteWorkTime()) return;
         initParameter();
         initTimer();
         addListener();
@@ -119,8 +120,9 @@ public class TimeSelector {
     }
 
     public void show(String tag, String showTime) {
-        this.tag = tag;
         selectedCalender.setTime(DateUtil.parse(showTime, FORMAT_STR));
+        showTime = showTime.replace(" ", "-").replace(":", "-");
+        this.tag = tag;
         String showtimes[] = showTime.split("-");
         showTimes = new ArrayList<>();
         showTimes.add(Integer.parseInt(showtimes[0]) - 2009);
@@ -134,7 +136,7 @@ public class TimeSelector {
 //            return;
 //        }
 
-        if (!excuteWorkTime()) return;
+        if (! excuteWorkTime()) return;
         initParameter();
         initTimer();
         addListener();
@@ -194,10 +196,10 @@ public class TimeSelector {
         endHour = endCalendar.get(Calendar.HOUR_OF_DAY);
         endMinute = endCalendar.get(Calendar.MINUTE);
         spanYear = startYear != endYear;
-        spanMon = (!spanYear) && (startMonth != endMonth);
-        spanDay = (!spanMon) && (startDay != endDay);
-        spanHour = (!spanDay) && (startHour != endHour);
-        spanMin = (!spanHour) && (startMinute != endMinute);
+        spanMon = (! spanYear) && (startMonth != endMonth);
+        spanDay = (! spanMon) && (startDay != endDay);
+        spanHour = (! spanDay) && (startHour != endHour);
+        spanMin = (! spanHour) && (startMinute != endMinute);
     }
 
     private void initTimer() {
@@ -309,7 +311,7 @@ public class TimeSelector {
 
     private boolean excuteWorkTime() {
         boolean res = true;
-        if (!TextUtils.isEmpty(workStart_str) && !TextUtils.isEmpty(workEnd_str)) {
+        if (! TextUtils.isEmpty(workStart_str) && ! TextUtils.isEmpty(workEnd_str)) {
             String[] start = workStart_str.split(":");
             String[] end = workEnd_str.split(":");
             hour_workStart = Integer.parseInt(start[0]);
@@ -630,5 +632,13 @@ public class TimeSelector {
         this.day_pv.setIsLoop(isLoop);
         this.hour_pv.setIsLoop(isLoop);
         this.minute_pv.setIsLoop(isLoop);
+    }
+
+    public static String format(int time) {
+        String t = String.format(Locale.getDefault(), "%d", time);
+        if (t.length() < 2) {
+            t = String.format("0%s", t);
+        }
+        return t;
     }
 }
